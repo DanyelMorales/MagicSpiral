@@ -128,12 +128,12 @@ function upL(mergeArr, limit) {
  * Merge two arrays, each array is an "L" of the spiral
  * 
  * Direction UP:
- * Iterates over the size of matrix size to be merged
+ * Iterates over the size of matrix to be merged
  * Takes the base array, and add 1 to x and y axis in the base array 
  * to reallocate the merged array values. 
  * 
  * Direction DOWN:
- * Iterates over the size of matrix size to be merged. Takes the base array
+ * Iterates over the size of matrix to be merged. Takes the base array
  * and maps exactly x and y with the array to be merged.
  * 
  *  
