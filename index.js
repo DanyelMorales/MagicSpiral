@@ -31,10 +31,10 @@ let n = process.argv.slice(2);
  * 
  */
 function init(n) {
-    let direction = "UP"; // > < -
-    let limits = [];
-
+    let direction = "UP";
+    let buffer = [];
     let lastLimit = 0;
+
     for (let i = 1; i <= n; i++) {
         let limit = {
             size: i,
@@ -43,21 +43,17 @@ function init(n) {
             limit: Math.pow(i, 2)
         };
 
+        buffer = addL(buffer, limit);
+
+        // changing direction of L
         if (direction == "UP") {
             direction = "DOWN";
         } else if (direction == "DOWN") {
             direction = "UP";
         }
-        limits.push(limit);
         lastLimit = limit.limit;
     }
-
-    let lastUsed = [];
-    for (let limit of limits) {
-        lastUsed = addL(lastUsed, limit);
-    }
-
-    return lastUsed;
+    return buffer;
 }
 
 /**
@@ -69,82 +65,72 @@ function addL(tmpArr, limit) {
     } else if (limit.direction == "UP") {
         return upL(tmpArr, limit);
     }
-
 }
 
 function downL(mergeArr, limit) {
-    let tmpArr = new Array();
-
-    let createY = function(from, to, size) {
-        for (let i = from, y = 0; i <= to; y++, i++) {
-            tmpArr[y][size] = (i);
-        }
-    };
-    let createX = function(from, to, size) {
-        for (let i = to, x = 0; i >= from; x++, i--) {
-            tmpArr[size][x] = (i);
-        }
-    };
-
-    for (let h = 0; h < limit.size; h++) {
-        tmpArr.push(new Array());
+    let tmpArr = createNewArray(limit.size);
+    let subLimits = createSubLimits(limit);
+    for (let i = subLimits.from, y = 0; i <= subLimits.toY; y++, i++) {
+        tmpArr[y][subLimits.size] = (i);
     }
-
-    let from = limit.lastLimit + 1;
-    let toY = from + (limit.size - 1);
-    let fromX = toY + 1;
-    let toX = fromX + (limit.size - 2);
-
-    createY(from, toY, limit.size - 1);
-    createX(fromX, toX, limit.size - 1);
-
-    // merge Arr, we sum 1 because we have now an offset for the current arr
-    for (let ty = 0; ty < limit.size - 1; ty++) {
-        for (let tx = 0; tx < limit.size - 1; tx++) {
-            tmpArr[ty][tx] = mergeArr[ty][tx];
-        }
+    for (let i = subLimits.toX, x = 0; i >= subLimits.fromX; x++, i--) {
+        tmpArr[subLimits.size][x] = (i);
     }
+    mergeL(tmpArr, mergeArr, "DOWN", limit.size);
     return tmpArr;
 }
 
 function upL(mergeArr, limit) {
-
-    let tmpArr = new Array();
-    tmpArr.push(new Array());
-
-    let createY = function(from, to, size) {
-        for (let i = from, y = size; i <= to; y--, i++) {
-            tmpArr[y].unshift(i);
-        }
-    };
-    let createX = function(from, to) {
-        for (let i = from, x = 1; i <= to; x++, i++) {
-            tmpArr[0].push(i);
-        }
-    };
-
-
-    for (let h = 0; h < limit.size; h++) {
-        tmpArr.push(new Array());
+    let tmpArr = createNewArray(limit.size);
+    let subLimits = createSubLimits(limit);
+    for (let i = subLimits.from, y = subLimits.size; i <= subLimits.toY; y--, i++) {
+        tmpArr[y].unshift(i);
     }
+    for (let i = subLimits.fromX, x = 1; i <= subLimits.toX; x++, i++) {
+        tmpArr[0].push(i);
+    }
+    mergeL(tmpArr, mergeArr, "UP", limit.size);
+    return tmpArr;
+}
 
+function mergeL(base, arr, direction, size) {
+    if (direction == "UP") {
+        for (let ty = 0; ty < size - 1; ty++) {
+            for (let tx = 0; tx < size - 1; tx++) {
+                base[ty + 1][tx + 1] = arr[ty][tx];
+            }
+        }
+    } else if (direction == "DOWN") {
+        for (let ty = 0; ty < size - 1; ty++) {
+            for (let tx = 0; tx < size - 1; tx++) {
+                base[ty][tx] = arr[ty][tx];
+            }
+        }
+    }
+}
 
+function createSubLimits(limit) {
     let from = limit.lastLimit + 1;
     let toY = from + (limit.size - 1);
     let fromX = toY + 1;
     let toX = fromX + (limit.size - 2);
-    createY(from, toY, limit.size - 1);
-    createX(fromX, toX, limit.size - 1);
 
-    for (let ty = 0; ty < limit.size - 1; ty++) {
-        for (let tx = 0; tx < limit.size - 1; tx++) {
-            tmpArr[ty + 1][tx + 1] = mergeArr[ty][tx];
-        }
-    }
-    return tmpArr;
-
+    return {
+        from: limit.lastLimit + 1,
+        toY: toY,
+        fromX: fromX,
+        toX: toX,
+        size: limit.size - 1
+    };
 }
 
-// print array solution
+function createNewArray(height) {
+    let tmpArr = new Array();
+    for (let h = 0; h < height; h++) {
+        tmpArr.push(new Array());
+    }
+    return tmpArr;
+}
+
 let view = init(n).map((y) => y.join("\t")).join("\n");
 console.log(view);
