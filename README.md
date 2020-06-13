@@ -56,18 +56,22 @@ Every L figure is composed by a Column and a Row. The Only Difference between Up
 **Upper L figures**
 
  The numbers in the column are in descendant mode:
+ ```
  [7]
  [6]
  [5]
-  
+```  
  The numbers in the row are in ascendant mode.
+ ```
  [ 7][ 8][ 9]
-  
+```
+
  The final array looks like this:
+ ```
   [ 7][ 8][ 9]
   [ 6][  ][  ]
   [ 5][  ][  ]
-  
+  ```
 
 **Lower L figures**
 Columns are generated in Ascending order, and are push to the end of the array.
