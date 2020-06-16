@@ -171,13 +171,13 @@ function createSubLimits(limit) {
     let toY = from + (limit.size - 1);
     let fromX = toY + 1;
     let toX = fromX + (limit.size - 2);
-
+    let size = limit.size - 1;
     return {
-        from: limit.lastLimit + 1,
+        from: from,
         toY: toY,
         fromX: fromX,
         toX: toX,
-        size: limit.size - 1
+        size: size
     };
 }
 

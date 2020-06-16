@@ -34,13 +34,36 @@ For a given number: generate an array with numeric values, those values should b
 ### Node [javascript]
 
 ```
-node javascript.js [number]
+node ./src/js/index.js [number]
 ```
 
 Passing 2 as argument
 ```
-node javascript.js 2
+node ./src/js/index.js 2
 ```
+
+### Rust
+
+Compiling the code
+```
+rust src/rust/rust.rs 
+```
+
+Passing 2 as argument
+```
+./src/rust/rust 2
+```
+
+Execute with bash/batch scripts:
+
+```
+// windows:
+./src/rust/compile_run.bat 2
+
+// Linux:
+./src/rust/compile_run.sh 2
+```
+
 **Generated**
 | 1 | 2 |
 |---|---|

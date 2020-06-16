@@ -1,0 +1,1 @@
+rustc rust.rs && ./rust $1
