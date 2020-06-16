@@ -1,7 +1,7 @@
 # Magic Spiral
 For a given number: generate an array with numeric values, those values should be stored in an ascendant mode following an spiral figure. 
 
-![Example of magic spiral](assets/example1.jpeg)
+![Example of magic spiral](assets/example1.jpg)
  
  Examples:
 
